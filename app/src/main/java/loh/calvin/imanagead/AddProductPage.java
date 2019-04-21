@@ -1,0 +1,301 @@
+package loh.calvin.imanagead;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+
+public class AddProductPage extends AppCompatActivity{
+
+    private EditText name, type, price, quantity;
+    private int currency;
+    private Button addImage, next;
+    private ImageView productImage;
+    private Spinner spinner;
+    private static final int Gallery_Pick = 1;
+    private Uri ImageUri;
+
+    private String productname, producttype, productprice, productquantity;
+    private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
+
+    FirebaseDatabase firebaseDatabase;
+    FirebaseStorage firebaseStorage;
+    FirebaseAuth mAuth;
+
+    private StorageReference productimageref;
+    private DatabaseReference productref, userref;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_product_page);
+        UIsettings();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        productimageref = FirebaseStorage.getInstance().getReference().child("Product Image");
+        productref = FirebaseDatabase.getInstance().getReference().child("Product");
+        userref = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        mAuth = FirebaseAuth.getInstance();
+        current_user_id = mAuth.getCurrentUser().getUid();
+
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateInfo();
+            }
+        });
+    }
+
+    private void openGallery(){
+        Intent opengallery = new Intent();
+        opengallery.setAction(Intent.ACTION_GET_CONTENT);
+        opengallery.setType("image/*");
+        startActivityForResult(opengallery, Gallery_Pick);
+    }
+
+    @Override
+    protected void onActivityResult(int requestcode, int resultcode, Intent data){
+        super.onActivityResult(requestcode, resultcode, data);
+
+        if(requestcode==Gallery_Pick && resultcode==RESULT_OK && data!=null){
+            ImageUri = data.getData();
+            productImage.setImageURI(ImageUri);
+            addImage.setVisibility(View.GONE);
+            productImage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void validateInfo(){
+        productname = name.getText().toString();
+        producttype = type.getText().toString();
+        productprice = price.getText().toString();
+        productquantity = quantity.getText().toString();
+
+        if(TextUtils.isEmpty(productname)){
+            Toast.makeText(AddProductPage.this, "Please fill in the product name", Toast.LENGTH_SHORT).show();
+        }
+        else if(TextUtils.isEmpty(producttype)){
+            Toast.makeText(AddProductPage.this, "Please fill in the product type", Toast.LENGTH_SHORT).show();
+        }
+        else if(TextUtils.isEmpty(productprice)){
+            Toast.makeText(AddProductPage.this, "Please fill in the product price", Toast.LENGTH_SHORT).show();
+        }
+        else if(TextUtils.isEmpty(productquantity)){
+            Toast.makeText(AddProductPage.this, "Please fill in the product quantity", Toast.LENGTH_SHORT).show();
+        }
+
+        else if(ImageUri != null){
+            storingImageToFirestore();
+        }
+        else{
+            savingPostWOImage();
+        }
+    }
+
+    private void storingImageToFirestore(){
+        Calendar calFordDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        saveCurrentDate = currentDate.format(calFordDate.getTime());
+
+        postRandomName = saveCurrentDate + saveCurrentTime;
+
+        final StorageReference filepath = productimageref.child(ImageUri.getLastPathSegment() + postRandomName + ".jpg");
+
+        filepath.putFile(ImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                    downloadUrl = task.getResult().getDownloadUrl().toString();
+                    Toast.makeText(AddProductPage.this, "Image uploaded successfully",Toast.LENGTH_SHORT).show();
+
+                    savingPost();
+                }
+                else{
+                    String message = task.getException().getMessage();
+                    Toast.makeText(AddProductPage.this,"Error" + message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void savingPost(){
+
+        Calendar calFordDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        saveCurrentDate = currentDate.format(calFordDate.getTime());
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+        saveCurrentTime = currentTime.format(calFordDate.getTime());
+
+        producttype = type.getText().toString();
+        postRandomName = saveCurrentDate + saveCurrentTime;
+
+        userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    HashMap hashMap = new HashMap();
+                    hashMap.put("Product Name", productname);
+                    hashMap.put("Product Type", producttype);
+                    hashMap.put("Quantity", productquantity);
+                    hashMap.put("Price", productprice);
+                    hashMap.put("Image", downloadUrl);
+
+                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if(task.isSuccessful()){
+                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+                else{
+                    HashMap hashMap = new HashMap();
+                    hashMap.put("Product Name", productname);
+                    hashMap.put("Product Type", producttype);
+                    hashMap.put("Quantity", productquantity);
+                    hashMap.put("Price", productprice);
+                    hashMap.put("Image", downloadUrl);
+
+                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if(task.isSuccessful()){
+                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void savingPostWOImage(){
+
+        Calendar calFordDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        saveCurrentDate = currentDate.format(calFordDate.getTime());
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+        saveCurrentTime = currentTime.format(calFordDate.getTime());
+
+        producttype = type.getText().toString();
+
+        postRandomName = saveCurrentDate + saveCurrentTime;
+
+        userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    HashMap hashMap = new HashMap();
+                    hashMap.put("Product Name", productname);
+                    hashMap.put("Product Type", producttype);
+                    hashMap.put("Quantity", productquantity);
+                    hashMap.put("Price", productprice);
+
+                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if(task.isSuccessful()){
+                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+                else{
+                    HashMap hashMap = new HashMap();
+                    hashMap.put("Product Name", productname);
+                    hashMap.put("Product Type", producttype);
+                    hashMap.put("Quantity", productquantity);
+                    hashMap.put("Price", productprice);
+                    hashMap.put("Image", downloadUrl);
+
+                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if(task.isSuccessful()){
+                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void UIsettings(){
+        name = (EditText)findViewById(R.id.addName);
+        type = (EditText)findViewById(R.id.addType);
+        price = (EditText)findViewById(R.id.addPrice);
+        quantity = (EditText)findViewById(R.id.addQuantity);
+
+        next = (Button) findViewById(R.id.buttontodes);
+        addImage = (Button)findViewById(R.id.addimagebutton);
+
+        productImage = (ImageView)findViewById(R.id.addimage1);
+        productImage.setVisibility(View.INVISIBLE);
+
+        spinner = (Spinner)findViewById(R.id.spinnerCurrency);
+
+    }
+}
