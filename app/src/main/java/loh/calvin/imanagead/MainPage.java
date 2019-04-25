@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainPage extends AppCompatActivity {
 
-    private Button add;
+    private Button add, signout;
     private RecyclerView typelist;
     private DatabaseReference typeref;
     private FirebaseAuth firebaseAuth;
@@ -39,6 +40,14 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainPage.this, AddProductPage.class));
+            }
+        });
+
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                startActivity(new Intent(MainPage.this, LoginPage.class));
             }
         });
 
@@ -97,5 +106,6 @@ public class MainPage extends AppCompatActivity {
     private void UIsettings(){
         add = (Button)findViewById(R.id.buttonadd1);
         typelist = (RecyclerView)findViewById(R.id.RV_Type);
+        signout = (Button)findViewById(R.id.btn_signout);
     }
 }

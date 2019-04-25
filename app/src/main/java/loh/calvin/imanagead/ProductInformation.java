@@ -40,7 +40,7 @@ public class ProductInformation extends AppCompatActivity {
     }
 
     private void displayuserpost(){
-        
+
     }
 
     private void UISettings(){
