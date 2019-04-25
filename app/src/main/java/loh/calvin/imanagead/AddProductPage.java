@@ -174,6 +174,7 @@ public class AddProductPage extends AppCompatActivity{
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pimage", downloadUrl);
+                    hashMap.put("pdate", saveCurrentDate);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
@@ -199,6 +200,7 @@ public class AddProductPage extends AppCompatActivity{
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pimage", downloadUrl);
+                    hashMap.put("pdate", saveCurrentDate);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
@@ -246,6 +248,7 @@ public class AddProductPage extends AppCompatActivity{
                     hashMap.put("ptype", producttype);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
+                    hashMap.put("pdate", saveCurrentDate);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
@@ -270,6 +273,7 @@ public class AddProductPage extends AppCompatActivity{
                     hashMap.put("ptype", producttype);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
+                    hashMap.put("pdate", saveCurrentDate);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
 
