@@ -18,7 +18,9 @@
         </activity>
         <activity android:name=".RegisterPage" />
         <activity android:name=".MainPage" />
-        <activity android:name=".AddProductPage"></activity>
+        <activity android:name=".AddProductPage" />
+        <activity android:name=".DescriptionPage" />
+        <activity android:name=".ProductInformation"></activity>
     </application>
 
 </manifest>

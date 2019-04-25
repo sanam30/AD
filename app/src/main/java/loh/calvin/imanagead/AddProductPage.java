@@ -107,10 +107,10 @@ public class AddProductPage extends AppCompatActivity{
         productquantity = quantity.getText().toString();
 
         if(TextUtils.isEmpty(productname)){
-            Toast.makeText(AddProductPage.this, "Please fill in the product name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddProductPage.this, "Please fill in the pname", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(producttype)){
-            Toast.makeText(AddProductPage.this, "Please fill in the product type", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddProductPage.this, "Please fill in the ptype", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(productprice)){
             Toast.makeText(AddProductPage.this, "Please fill in the product price", Toast.LENGTH_SHORT).show();
@@ -161,26 +161,30 @@ public class AddProductPage extends AppCompatActivity{
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
         saveCurrentTime = currentTime.format(calFordDate.getTime());
 
-        producttype = type.getText().toString();
-        postRandomName = saveCurrentDate + saveCurrentTime;
+        final String producttype = type.getText().toString();
+        final String postRandomName = productname + " " + saveCurrentDate + " " + saveCurrentTime;
 
         userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     HashMap hashMap = new HashMap();
-                    hashMap.put("Product Name", productname);
-                    hashMap.put("Product Type", producttype);
-                    hashMap.put("Quantity", productquantity);
-                    hashMap.put("Price", productprice);
-                    hashMap.put("Image", downloadUrl);
+                    hashMap.put("pname", productname);
+                    hashMap.put("ptype", producttype);
+                    hashMap.put("pquantity", productquantity);
+                    hashMap.put("pprice", productprice);
+                    hashMap.put("pimage", downloadUrl);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
                                 Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype);
+                                descriptionpageintent.putExtra("product_id", postRandomName);
+                                startActivity(descriptionpageintent);
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
@@ -189,19 +193,23 @@ public class AddProductPage extends AppCompatActivity{
                     });
                 }
                 else{
-                    HashMap hashMap = new HashMap();
-                    hashMap.put("Product Name", productname);
-                    hashMap.put("Product Type", producttype);
-                    hashMap.put("Quantity", productquantity);
-                    hashMap.put("Price", productprice);
-                    hashMap.put("Image", downloadUrl);
+                    final HashMap hashMap = new HashMap();
+                    hashMap.put("pname", productname);
+                    hashMap.put("ptype", producttype);
+                    hashMap.put("pquantity", productquantity);
+                    hashMap.put("pprice", productprice);
+                    hashMap.put("pimage", downloadUrl);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
                                 Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype);
+                                descriptionpageintent.putExtra("product_id", postRandomName);
+                                startActivity(descriptionpageintent);
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
@@ -226,26 +234,29 @@ public class AddProductPage extends AppCompatActivity{
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
         saveCurrentTime = currentTime.format(calFordDate.getTime());
 
-        producttype = type.getText().toString();
-
-        postRandomName = saveCurrentDate + saveCurrentTime;
+        final String producttype = type.getText().toString();
+        final String postRandomName = productname + " " + saveCurrentDate + " " + saveCurrentTime;
 
         userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     HashMap hashMap = new HashMap();
-                    hashMap.put("Product Name", productname);
-                    hashMap.put("Product Type", producttype);
-                    hashMap.put("Quantity", productquantity);
-                    hashMap.put("Price", productprice);
+                    hashMap.put("pname", productname);
+                    hashMap.put("ptype", producttype);
+                    hashMap.put("pquantity", productquantity);
+                    hashMap.put("pprice", productprice);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
                                 Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype);
+                                descriptionpageintent.putExtra("product_id", postRandomName);
+                                startActivity(descriptionpageintent);
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
@@ -255,18 +266,22 @@ public class AddProductPage extends AppCompatActivity{
                 }
                 else{
                     HashMap hashMap = new HashMap();
-                    hashMap.put("Product Name", productname);
-                    hashMap.put("Product Type", producttype);
-                    hashMap.put("Quantity", productquantity);
-                    hashMap.put("Price", productprice);
-                    hashMap.put("Image", downloadUrl);
+                    hashMap.put("pname", productname);
+                    hashMap.put("ptype", producttype);
+                    hashMap.put("pquantity", productquantity);
+                    hashMap.put("pprice", productprice);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                startActivity(new Intent(AddProductPage.this,MainPage.class));
+                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
                                 Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype);
+                                descriptionpageintent.putExtra("product_id", postRandomName);
+                                startActivity(descriptionpageintent);
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
