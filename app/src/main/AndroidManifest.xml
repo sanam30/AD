@@ -20,7 +20,8 @@
         <activity android:name=".MainPage" />
         <activity android:name=".AddProductPage" />
         <activity android:name=".DescriptionPage" />
-        <activity android:name=".ProductInformation"></activity>
+        <activity android:name=".ProductInformation" />
+        <activity android:name=".SingleProductPage"></activity>
     </application>
 
 </manifest>

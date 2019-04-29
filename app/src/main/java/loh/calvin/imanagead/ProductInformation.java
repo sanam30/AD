@@ -69,6 +69,7 @@ public class ProductInformation extends AppCompatActivity {
             protected void populateViewHolder(ProductViewHolder viewHolder, Product model, int position) {
 
                 final String productID = getRef(position).getKey();
+
                 viewHolder.setPtype(model.getPtype());
                 viewHolder.setPdate(model.getPdate());
                 viewHolder.setPimage(getApplicationContext(),model.getPimage());
@@ -79,8 +80,9 @@ public class ProductInformation extends AppCompatActivity {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent viewPageIntent = new Intent(ProductInformation.this, ProductInformation.class);
+                        Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
                         viewPageIntent.putExtra("productID", productID);
+                        viewPageIntent.putExtra("producttype", producttype);
                         startActivity(viewPageIntent);
                     }
                 });

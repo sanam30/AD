@@ -81,7 +81,7 @@
         android:layout_marginStart="79dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="price"
+        android:hint="Price (sell)"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
