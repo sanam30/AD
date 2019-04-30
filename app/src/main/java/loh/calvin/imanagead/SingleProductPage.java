@@ -27,7 +27,7 @@ public class SingleProductPage extends AppCompatActivity {
     private TextView productname, productdescription, productprice, productquantity;
     private EditText newprice, newquantity;
     private ImageView productimage;
-    private Button edit, save;
+    private Button edit, save, remove;
     String type = null, id = null, current_user_id;
     DatabaseReference productref, userref;
 
@@ -65,6 +65,13 @@ public class SingleProductPage extends AppCompatActivity {
                         editproduct();
                     }
                 });
+            }
+        });
+
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                productref.removeValue();
             }
         });
 
@@ -148,5 +155,6 @@ public class SingleProductPage extends AppCompatActivity {
         save = (Button)findViewById(R.id.save_single_page);
         newprice = (EditText)findViewById(R.id.newprice_single_page);
         newquantity = (EditText)findViewById(R.id.newquantity_single_page);
+        remove = (Button) findViewById(R.id.remove_single_page);
     }
 }
