@@ -1,5 +1,6 @@
 package loh.calvin.imanagead;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ public class DescriptionPage extends AppCompatActivity {
     private String des, current_user_id;
     private EditText description;
     private Button save;
+    ProgressDialog progressDialog;
 
     FirebaseAuth firebaseAuth, mAuth;
     FirebaseDatabase firebaseDatabase;
@@ -43,6 +45,7 @@ public class DescriptionPage extends AppCompatActivity {
         userref = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
         current_user_id = mAuth.getCurrentUser().getUid();
+        progressDialog = new ProgressDialog(this);
 
 
         productid = getIntent().getExtras().getString("product_id");
@@ -64,6 +67,8 @@ public class DescriptionPage extends AppCompatActivity {
             Toast.makeText(DescriptionPage.this,"Please fill in the description",Toast.LENGTH_SHORT).show();
         }
         else{
+            progressDialog.setMessage("Working on it...");
+            progressDialog.show();
             post();
         }
     }
@@ -84,9 +89,11 @@ public class DescriptionPage extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(DescriptionPage.this, "Successfull", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(DescriptionPage.this, MainPage.class));
+                            progressDialog.dismiss();
                         }
                         else{
                             Toast.makeText(DescriptionPage.this, "Failed",Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     }
                 });

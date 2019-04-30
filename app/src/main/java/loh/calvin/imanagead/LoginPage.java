@@ -1,5 +1,6 @@
 package loh.calvin.imanagead;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class LoginPage extends AppCompatActivity {
     private EditText Password, Email;
     private Button Login, Register;
     private FirebaseAuth firebaseAuth;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class LoginPage extends AppCompatActivity {
         UIsettings();
 
         firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
 
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,8 +41,11 @@ public class LoginPage extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.setMessage("Logging in... Please wait a moment");
+                progressDialog.show();
                 if(Email.getText().toString().isEmpty()||Password.getText().toString().isEmpty()){
                     Toast.makeText(LoginPage.this,"Please fill in the detail",Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
                 else {
                     validate(Email.getText().toString(), Password.getText().toString());
@@ -62,9 +68,11 @@ public class LoginPage extends AppCompatActivity {
                 if(task.isSuccessful()){
                     Toast.makeText(LoginPage.this, "Login Successfull", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(LoginPage.this, MainPage.class));
+                    progressDialog.dismiss();
                 }
                 else {
                     Toast.makeText(LoginPage.this,"Login Failed", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
             }
         });

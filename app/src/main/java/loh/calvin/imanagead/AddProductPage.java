@@ -1,5 +1,6 @@
 package loh.calvin.imanagead;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -40,6 +41,7 @@ public class AddProductPage extends AppCompatActivity{
     private Spinner spinner;
     private static final int Gallery_Pick = 1;
     private Uri ImageUri;
+    ProgressDialog progressDialog;
 
     private String productname, producttype, productprice, productquantity;
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
@@ -62,6 +64,7 @@ public class AddProductPage extends AppCompatActivity{
         productimageref = FirebaseStorage.getInstance().getReference().child("Product Image");
         productref = FirebaseDatabase.getInstance().getReference().child("Product");
         userref = FirebaseDatabase.getInstance().getReference().child("Users");
+        progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         current_user_id = mAuth.getCurrentUser().getUid();
@@ -76,6 +79,8 @@ public class AddProductPage extends AppCompatActivity{
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.setMessage("Working on it...");
+                progressDialog.show();
                 validateInfo();
             }
         });
@@ -186,9 +191,11 @@ public class AddProductPage extends AppCompatActivity{
                                 descriptionpageintent.putExtra("product_type", producttype);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
+                                progressDialog.dismiss();
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
                     });
@@ -212,9 +219,11 @@ public class AddProductPage extends AppCompatActivity{
                                 descriptionpageintent.putExtra("product_type", producttype);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
+                                progressDialog.dismiss();
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
                     });
@@ -260,9 +269,11 @@ public class AddProductPage extends AppCompatActivity{
                                 descriptionpageintent.putExtra("product_type", producttype);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
+                                progressDialog.dismiss();
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
                     });
@@ -286,9 +297,11 @@ public class AddProductPage extends AppCompatActivity{
                                 descriptionpageintent.putExtra("product_type", producttype);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
+                                progressDialog.dismiss();
                             }
                             else{
                                 Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
                     });
