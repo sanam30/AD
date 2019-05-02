@@ -21,7 +21,8 @@
         <activity android:name=".AddProductPage" />
         <activity android:name=".DescriptionPage" />
         <activity android:name=".ProductInformation" />
-        <activity android:name=".SingleProductPage"></activity>
+        <activity android:name=".SingleProductPage" />
+        <activity android:name=".AddProductPage2"></activity>
     </application>
 
 </manifest>

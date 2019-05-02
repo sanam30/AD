@@ -21,7 +21,7 @@ public class ProductInformation extends AppCompatActivity {
 
     private String producttype = null;
     private String forref;
-    private Button back;
+    private Button back, add;
     RecyclerView productInfo;
     private DatabaseReference typeref;
     private FirebaseAuth firebaseAuth;
@@ -53,6 +53,15 @@ public class ProductInformation extends AppCompatActivity {
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         productInfo.setLayoutManager(linearLayoutManager);
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addproduct  = new Intent(ProductInformation.this, AddProductPage2.class);
+                addproduct.putExtra("producttype", producttype);
+                startActivity(addproduct);
+            }
+        });
 
         displayuserpost();
     }
@@ -129,6 +138,7 @@ public class ProductInformation extends AppCompatActivity {
         back = (Button)findViewById(R.id.button_back);
         productInfo = (RecyclerView)findViewById(R.id.RV_product);
         inf = (TextView)findViewById(R.id.tv_inf);
+        add = (Button)findViewById(R.id.add_product2);
     }
 
 }

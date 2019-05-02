@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,9 +30,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class AddProductPage extends AppCompatActivity{
+public class AddProductPage2 extends AppCompatActivity {
 
-    private EditText name, type, price, quantity;
+    private EditText name, price, quantity;
     private int currency;
     private Button addImage, next;
     private ImageView productImage;
@@ -42,8 +40,9 @@ public class AddProductPage extends AppCompatActivity{
     private static final int Gallery_Pick = 1;
     private Uri ImageUri;
     ProgressDialog progressDialog;
+    String producttype2 = null;
 
-    private String productname, producttype, productprice, productquantity;
+    private String productname, productprice, productquantity;
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
 
     FirebaseDatabase firebaseDatabase;
@@ -56,7 +55,7 @@ public class AddProductPage extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product_page);
+        setContentView(R.layout.activity_add_product_page2);
         UIsettings();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -65,6 +64,7 @@ public class AddProductPage extends AppCompatActivity{
         productref = FirebaseDatabase.getInstance().getReference().child("Product");
         userref = FirebaseDatabase.getInstance().getReference().child("Users");
         progressDialog = new ProgressDialog(this);
+        producttype2 = getIntent().getExtras().getString("producttype");
 
         mAuth = FirebaseAuth.getInstance();
         current_user_id = mAuth.getCurrentUser().getUid();
@@ -79,6 +79,8 @@ public class AddProductPage extends AppCompatActivity{
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.setMessage("Working on it...");
+                progressDialog.show();
                 validateInfo();
             }
         });
@@ -105,31 +107,23 @@ public class AddProductPage extends AppCompatActivity{
 
     private void validateInfo(){
         productname = name.getText().toString();
-        producttype = type.getText().toString();
         productprice = price.getText().toString();
         productquantity = quantity.getText().toString();
 
         if(TextUtils.isEmpty(productname)){
-            Toast.makeText(AddProductPage.this, "Please fill in the pname", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(producttype)){
-            Toast.makeText(AddProductPage.this, "Please fill in the ptype", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddProductPage2.this, "Please fill in the pname", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(productprice)){
-            Toast.makeText(AddProductPage.this, "Please fill in the product price", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddProductPage2.this, "Please fill in the product price", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(productquantity)){
-            Toast.makeText(AddProductPage.this, "Please fill in the product quantity", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddProductPage2.this, "Please fill in the product quantity", Toast.LENGTH_SHORT).show();
         }
 
         else if(ImageUri != null){
-            progressDialog.setMessage("Working on it...");
-            progressDialog.show();
             storingImageToFirestore();
         }
         else{
-            progressDialog.setMessage("Working on it...");
-            progressDialog.show();
             savingPostWOImage();
         }
     }
@@ -148,13 +142,13 @@ public class AddProductPage extends AppCompatActivity{
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful()){
                     downloadUrl = task.getResult().getDownloadUrl().toString();
-                    Toast.makeText(AddProductPage.this, "Image uploaded successfully",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddProductPage2.this, "Image uploaded successfully",Toast.LENGTH_SHORT).show();
 
                     savingPost();
                 }
                 else{
                     String message = task.getException().getMessage();
-                    Toast.makeText(AddProductPage.this,"Error" + message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddProductPage2.this,"Error" + message, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -168,7 +162,6 @@ public class AddProductPage extends AppCompatActivity{
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
         saveCurrentTime = currentTime.format(calFordDate.getTime());
 
-        final String producttype = type.getText().toString();
         final String postRandomName = productname + " " + saveCurrentDate + " " + saveCurrentTime;
 
         userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
@@ -177,26 +170,26 @@ public class AddProductPage extends AppCompatActivity{
                 if (dataSnapshot.exists()){
                     HashMap hashMap = new HashMap();
                     hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
+                    hashMap.put("ptype", producttype2);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pimage", downloadUrl);
                     hashMap.put("pdate", saveCurrentDate);
 
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                    productref.child(producttype2).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
+                                productref.child("Type").child(producttype2).child("ptype").setValue(producttype2);
+                                Toast.makeText(AddProductPage2.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage2.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype2);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
                                 progressDialog.dismiss();
                             }
                             else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddProductPage2.this, "Error", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         }
@@ -205,26 +198,26 @@ public class AddProductPage extends AppCompatActivity{
                 else{
                     final HashMap hashMap = new HashMap();
                     hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
+                    hashMap.put("ptype", producttype2);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pimage", downloadUrl);
                     hashMap.put("pdate", saveCurrentDate);
 
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                    productref.child(producttype2).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
+                                productref.child("Type").child(producttype2).child("ptype").setValue(producttype2);
+                                Toast.makeText(AddProductPage2.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage2.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype2);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
                                 progressDialog.dismiss();
                             }
                             else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddProductPage2.this, "Error", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         }
@@ -247,7 +240,6 @@ public class AddProductPage extends AppCompatActivity{
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
         saveCurrentTime = currentTime.format(calFordDate.getTime());
 
-        final String producttype = type.getText().toString();
         final String postRandomName = productname + " " + saveCurrentDate + " " + saveCurrentTime;
 
         userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
@@ -256,25 +248,25 @@ public class AddProductPage extends AppCompatActivity{
                 if (dataSnapshot.exists()){
                     HashMap hashMap = new HashMap();
                     hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
+                    hashMap.put("ptype", producttype2);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pdate", saveCurrentDate);
 
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                    productref.child(producttype2).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
+                                productref.child("Type").child(producttype2).child("ptype").setValue(producttype2);
+                                Toast.makeText(AddProductPage2.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage2.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype2);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
                                 progressDialog.dismiss();
                             }
                             else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddProductPage2.this, "Error", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         }
@@ -283,26 +275,26 @@ public class AddProductPage extends AppCompatActivity{
                 else{
                     HashMap hashMap = new HashMap();
                     hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
+                    hashMap.put("ptype", producttype2);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pdate", saveCurrentDate);
 
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                    productref.child(producttype2).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
 
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
+                                productref.child("Type").child(producttype2).child("ptype").setValue(producttype2);
+                                Toast.makeText(AddProductPage2.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                Intent descriptionpageintent = new Intent(AddProductPage2.this, DescriptionPage.class);
+                                descriptionpageintent.putExtra("product_type", producttype2);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
                                 startActivity(descriptionpageintent);
                                 progressDialog.dismiss();
                             }
                             else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddProductPage2.this, "Error", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         }
@@ -318,18 +310,17 @@ public class AddProductPage extends AppCompatActivity{
     }
 
     private void UIsettings(){
-        name = (EditText)findViewById(R.id.addName);
-        type = (EditText)findViewById(R.id.addType);
-        price = (EditText)findViewById(R.id.addPrice);
-        quantity = (EditText)findViewById(R.id.addQuantity);
+        name = (EditText)findViewById(R.id.addName2);
+        price = (EditText)findViewById(R.id.addPrice2);
+        quantity = (EditText)findViewById(R.id.addQuantity2);
 
-        next = (Button) findViewById(R.id.buttontodes);
-        addImage = (Button)findViewById(R.id.addimagebutton);
+        next = (Button) findViewById(R.id.buttontodes2);
+        addImage = (Button)findViewById(R.id.addimagebutton2);
 
-        productImage = (ImageView)findViewById(R.id.addimage1);
+        productImage = (ImageView)findViewById(R.id.addimage12);
         productImage.setVisibility(View.INVISIBLE);
 
-        spinner = (Spinner)findViewById(R.id.spinnerCurrency);
+        spinner = (Spinner)findViewById(R.id.spinnerCurrency2);
 
     }
 }
