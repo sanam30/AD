@@ -29,7 +29,6 @@ public class LoginPageEmail {
     }
     @Test
     public void emailValidator(){
-        assertTrue(emailValidator.isValidEmail("calvin@yahoo.com"));
     }
     @After
     public void tearDown() throws Exception {

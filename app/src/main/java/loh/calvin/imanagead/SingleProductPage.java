@@ -29,7 +29,7 @@ public class SingleProductPage extends AppCompatActivity {
     private EditText newprice, newquantity;
     private ImageView productimage;
     private Button edit, save, remove;
-    String type = null, id = null, current_user_id;
+    String type = null, id = null, current_user_id, currency = null;
     DatabaseReference productref, userref;
 
     @Override
@@ -39,6 +39,7 @@ public class SingleProductPage extends AppCompatActivity {
 
         type = getIntent().getExtras().getString("producttype");
         id = getIntent().getExtras().getString("productID");
+        currency = getIntent().getExtras().getString("productcurrency");
         userref = FirebaseDatabase.getInstance().getReference().child("Users");
         current_user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -136,7 +137,7 @@ public class SingleProductPage extends AppCompatActivity {
 
                 productdescription.setText(description);
                 productname.setText(name);
-                productprice.setText(price);
+                productprice.setText(currency + "$ " + price);
                 productquantity.setText(quantity);
                 Picasso.get().load(image).into(productimage);
             }

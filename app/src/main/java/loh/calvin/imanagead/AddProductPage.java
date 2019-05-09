@@ -32,10 +32,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class AddProductPage extends AppCompatActivity{
+public class AddProductPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private EditText name, type, price, quantity;
-    private int currency;
     private Button addImage, next;
     private ImageView productImage;
     private Spinner spinner;
@@ -43,7 +42,7 @@ public class AddProductPage extends AppCompatActivity{
     private Uri ImageUri;
     ProgressDialog progressDialog;
 
-    private String productname, producttype, productprice, productquantity;
+    private String productname, producttype, productprice, productquantity, currency;
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
 
     FirebaseDatabase firebaseDatabase;
@@ -69,10 +68,17 @@ public class AddProductPage extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
         current_user_id = mAuth.getCurrentUser().getUid();
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(AddProductPage.this, R.array.currency, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(this);
+
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
+
             }
         });
 
@@ -160,6 +166,16 @@ public class AddProductPage extends AppCompatActivity{
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        currency = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     private void savingPost(){
 
         Calendar calFordDate = Calendar.getInstance();
@@ -174,62 +190,32 @@ public class AddProductPage extends AppCompatActivity{
         userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    HashMap hashMap = new HashMap();
-                    hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
-                    hashMap.put("pquantity", productquantity);
-                    hashMap.put("pprice", productprice);
-                    hashMap.put("pimage", downloadUrl);
-                    hashMap.put("pdate", saveCurrentDate);
+                HashMap hashMap = new HashMap();
+                hashMap.put("pname", productname);
+                hashMap.put("ptype", producttype);
+                hashMap.put("pquantity", productquantity);
+                hashMap.put("pprice", productprice);
+                hashMap.put("pimage", downloadUrl);
+                hashMap.put("pdate", saveCurrentDate);
+                hashMap.put("pcurrency", currency);
 
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
-                                descriptionpageintent.putExtra("product_id", postRandomName);
-                                startActivity(descriptionpageintent);
-                                progressDialog.dismiss();
-                            }
-                            else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
+                productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            productref.child("Type").child(producttype).child("ptype").setValue(producttype);
+                            Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                            Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
+                            descriptionpageintent.putExtra("product_type", producttype);
+                            descriptionpageintent.putExtra("product_id", postRandomName);
+                            startActivity(descriptionpageintent);
+                            progressDialog.dismiss();
+                        } else {
+                            Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
-                    });
-                }
-                else{
-                    final HashMap hashMap = new HashMap();
-                    hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
-                    hashMap.put("pquantity", productquantity);
-                    hashMap.put("pprice", productprice);
-                    hashMap.put("pimage", downloadUrl);
-                    hashMap.put("pdate", saveCurrentDate);
-
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
-                                descriptionpageintent.putExtra("product_id", postRandomName);
-                                startActivity(descriptionpageintent);
-                                progressDialog.dismiss();
-                            }
-                            else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
 
             @Override
@@ -253,40 +239,13 @@ public class AddProductPage extends AppCompatActivity{
         userref.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
                     HashMap hashMap = new HashMap();
                     hashMap.put("pname", productname);
                     hashMap.put("ptype", producttype);
                     hashMap.put("pquantity", productquantity);
                     hashMap.put("pprice", productprice);
                     hashMap.put("pdate", saveCurrentDate);
-
-                    productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if(task.isSuccessful()){
-                                productref.child("Type").child(producttype).child("ptype").setValue(producttype);
-                                Toast.makeText(AddProductPage.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                                Intent descriptionpageintent = new Intent(AddProductPage.this, DescriptionPage.class);
-                                descriptionpageintent.putExtra("product_type", producttype);
-                                descriptionpageintent.putExtra("product_id", postRandomName);
-                                startActivity(descriptionpageintent);
-                                progressDialog.dismiss();
-                            }
-                            else{
-                                Toast.makeText(AddProductPage.this, "Error", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                        }
-                    });
-                }
-                else{
-                    HashMap hashMap = new HashMap();
-                    hashMap.put("pname", productname);
-                    hashMap.put("ptype", producttype);
-                    hashMap.put("pquantity", productquantity);
-                    hashMap.put("pprice", productprice);
-                    hashMap.put("pdate", saveCurrentDate);
+                    hashMap.put("pcurrency", currency);
 
                     productref.child(producttype).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
 
@@ -307,7 +266,7 @@ public class AddProductPage extends AppCompatActivity{
                             }
                         }
                     });
-                }
+
             }
 
             @Override
@@ -332,4 +291,6 @@ public class AddProductPage extends AppCompatActivity{
         spinner = (Spinner)findViewById(R.id.spinnerCurrency);
 
     }
+
+
 }

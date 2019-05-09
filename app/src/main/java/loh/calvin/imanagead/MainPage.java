@@ -1,6 +1,7 @@
 package loh.calvin.imanagead;
 
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 
 public class MainPage extends AppCompatActivity {
 
-    private Button add, signout;
+    private Button add, signout, searchbutton;
     private RecyclerView typelist;
     private DatabaseReference typeref;
     private FirebaseAuth firebaseAuth;
@@ -62,25 +64,12 @@ public class MainPage extends AppCompatActivity {
 
         displayuserpost();
 
-        search.addTextChangedListener(new TextWatcher() {
+        searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                filter(s.toString());
+            public void onClick(View v) {
+                displayuserpost();
             }
         });
-    }
-
-    private void filter(String text){
 
     }
 
@@ -95,18 +84,44 @@ public class MainPage extends AppCompatActivity {
             @Override
             protected void populateViewHolder(ProductViewHolder viewHolder, Product model, int position) {
 
-                final String producttype = getRef(position).getKey();
+                if (search.getText().toString().isEmpty()) {
 
-                viewHolder.setPtype(model.getPtype());
+                    final String producttype = getRef(position).getKey();
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent viewPageIntent = new Intent(MainPage.this, ProductInformation.class);
-                        viewPageIntent.putExtra("producttype", producttype);
-                        startActivity(viewPageIntent);
+                    viewHolder.setPtype(model.getPtype());
+
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent viewPageIntent = new Intent(MainPage.this, ProductInformation.class);
+                            viewPageIntent.putExtra("producttype", producttype);
+                            startActivity(viewPageIntent);
+                        }
+                    });
+                }
+                else if(!search.getText().toString().isEmpty()){
+
+                    String x = search.getText().toString();
+
+                    final String producttype = getRef(position).getKey();
+
+                    if(!model.getPtype().contains(x)) {
+
                     }
-                });
+                    else if(model.getPtype().contains(x)){
+
+                        viewHolder.setPtype(model.getPtype());
+
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent viewPageIntent = new Intent(MainPage.this, ProductInformation.class);
+                                viewPageIntent.putExtra("producttype", producttype);
+                                startActivity(viewPageIntent);
+                            }
+                        });
+                    }
+                }
             }
         };
         typelist.setAdapter(firebaseRecyclerAdapter);
@@ -131,5 +146,6 @@ public class MainPage extends AppCompatActivity {
         typelist = (RecyclerView)findViewById(R.id.RV_Type);
         signout = (Button)findViewById(R.id.btn_signout);
         search = (EditText)findViewById(R.id.search_main);
+        searchbutton = (Button)findViewById(R.id.searchtypebutton);
     }
 }

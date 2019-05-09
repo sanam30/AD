@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,7 @@ import com.squareup.picasso.Picasso;
 public class ProductInformation extends AppCompatActivity {
 
     private String producttype = null;
+    private String productcurrency = null;
     private String forref;
     private Button back, add;
     RecyclerView productInfo;
@@ -34,6 +36,7 @@ public class ProductInformation extends AppCompatActivity {
 
         producttype = getIntent().getExtras().getString("producttype");
         forref = producttype.toString();
+
         typeref = FirebaseDatabase.getInstance().getReference().child("Product").child(forref);
 
         UISettings();
@@ -75,7 +78,7 @@ public class ProductInformation extends AppCompatActivity {
                         typeref
                 ) {
             @Override
-            protected void populateViewHolder(ProductViewHolder viewHolder, Product model, int position) {
+            protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
 
                 final String productID = getRef(position).getKey();
 
@@ -85,6 +88,7 @@ public class ProductInformation extends AppCompatActivity {
                 viewHolder.setPname(model.getPname());
                 viewHolder.setPquantity(model.getPquantity());
                 viewHolder.setPprice(model.getPprice());
+                viewHolder.setPcurrency(model.getPcurrency());
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -92,6 +96,7 @@ public class ProductInformation extends AppCompatActivity {
                         Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
                         viewPageIntent.putExtra("productID", productID);
                         viewPageIntent.putExtra("producttype", producttype);
+                        viewPageIntent.putExtra("productcurrency", model.getPcurrency());
                         startActivity(viewPageIntent);
                     }
                 });
@@ -131,6 +136,10 @@ public class ProductInformation extends AppCompatActivity {
         public void setPprice(String pprice) {
             TextView productprice = (TextView) mView.findViewById(R.id.tv_pprice);
             productprice.setText("$ " + pprice);
+        }
+        public void setPcurrency(String pcurrency){
+            TextView productcurrency = (TextView) mView.findViewById(R.id.Pcurrency);
+            productcurrency.setText(pcurrency);
         }
     }
 

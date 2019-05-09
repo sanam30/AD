@@ -1,15 +1,16 @@
 package loh.calvin.imanagead;
 
 public class Product {
-    public String pname, ptype, pquantity, pprice, pimage, pdate;
+    public String pname, ptype, pquantity, pprice, pimage, pdate, pcurrency;
 
-    public Product(String pname, String ptype, String pquantity, String pprice, String pimage, String pdate) {
+    public Product(String pname, String ptype, String pquantity, String pprice, String pimage, String pdate, String pcurrency) {
         this.pname = pname;
         this.ptype = ptype;
         this.pquantity = pquantity;
         this.pprice = pprice;
         this.pimage = pimage;
         this.pdate = pdate;
+        this.pcurrency = pcurrency;
     }
 
     public Product() {
@@ -61,5 +62,13 @@ public class Product {
 
     public void setPdate(String pdate) {
         this.pdate = pdate;
+    }
+
+    public String getPcurrency() {
+        return pcurrency;
+    }
+
+    public void setPcurrency(String pcurrency) {
+        this.pcurrency = pcurrency;
     }
 }
