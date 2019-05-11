@@ -74,41 +74,20 @@ public class MainPage extends AppCompatActivity {
     }
 
     private void displayuserpost() {
-        FirebaseRecyclerAdapter<Product, ProductViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Product, ProductViewHolder>
-                (
-                        Product.class,
-                        R.layout.adapter_all_type,
-                        ProductViewHolder.class,
-                        typeref
-                ) {
-            @Override
-            protected void populateViewHolder(ProductViewHolder viewHolder, Product model, int position) {
-
-                if (search.getText().toString().isEmpty()) {
-
-                    final String producttype = getRef(position).getKey();
-
-                    viewHolder.setPtype(model.getPtype());
-
-                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent viewPageIntent = new Intent(MainPage.this, ProductInformation.class);
-                            viewPageIntent.putExtra("producttype", producttype);
-                            startActivity(viewPageIntent);
-                        }
-                    });
-                }
-                else if(!search.getText().toString().isEmpty()){
-
-                    String x = search.getText().toString();
+            FirebaseRecyclerAdapter<Product, ProductViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Product, ProductViewHolder>
+                    (
+                            Product.class,
+                            R.layout.adapter_all_type,
+                            ProductViewHolder.class,
+                            typeref
+                    )
+            {
+                @Override
+                protected void populateViewHolder(ProductViewHolder viewHolder, Product model, int position) {
 
                     final String producttype = getRef(position).getKey();
 
-                    if(!model.getPtype().contains(x)) {
-
-                    }
-                    else if(model.getPtype().contains(x)){
+                    if (search.getText().toString().isEmpty()) {
 
                         viewHolder.setPtype(model.getPtype());
 
@@ -121,11 +100,32 @@ public class MainPage extends AppCompatActivity {
                             }
                         });
                     }
+                    else if(!search.getText().toString().isEmpty()){
+
+                        String x = search.getText().toString();
+
+                        if(model.getPtype().contains(x)) {
+
+                            viewHolder.setPtype(model.getPtype());
+
+                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent viewPageIntent = new Intent(MainPage.this, ProductInformation.class);
+                                    viewPageIntent.putExtra("producttype", producttype);
+                                    startActivity(viewPageIntent);
+                                }
+                            });
+                        }
+                        else if (!model.getPtype().contains(x)){
+                            viewHolder.setPtype2(model.getPtype());
+                        }
+                    }
                 }
-            }
-        };
-        typelist.setAdapter(firebaseRecyclerAdapter);
+            };
+            typelist.setAdapter(firebaseRecyclerAdapter);
     }
+
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         View mView;
@@ -138,6 +138,11 @@ public class MainPage extends AppCompatActivity {
         public void setPtype(String ptype) {
             TextView producttype = (TextView) mView.findViewById(R.id.tv_producttype2);
             producttype.setText(ptype);
+            producttype.setVisibility(View.VISIBLE);
+        }
+        public void setPtype2(String ptype2){
+            TextView producttype2 = (TextView) mView.findViewById(R.id.tv_producttype2);
+            producttype2.setVisibility(View.GONE);
         }
     }
 
