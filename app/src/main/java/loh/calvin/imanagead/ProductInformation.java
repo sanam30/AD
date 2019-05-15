@@ -173,7 +173,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                             viewHolder.setPimage(getApplicationContext(), model.getPimage());
                             viewHolder.setPname(model.getPname());
                             viewHolder.setPquantity(model.getPquantity());
-                            viewHolder.setPprice(model.getPprice());
+                            viewHolder.setPprice("$" + model.getPprice());
                             viewHolder.setPcurrency(model.getPcurrency());
 
                             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +245,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                 viewHolder.setPimage(getApplicationContext(), model.getPimage());
                                 viewHolder.setPname(model.getPname());
                                 viewHolder.setPquantity(model.getPquantity());
-                                viewHolder.setPprice(model.getPprice());
+                                viewHolder.setPprice("$" + model.getPprice());
                                 viewHolder.setPcurrency(model.getPcurrency());
 
                                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -340,7 +340,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                 viewHolder.setPimage(getApplicationContext(), model.getPimage());
                                 viewHolder.setPname(model.getPname());
                                 viewHolder.setPquantity(model.getPquantity());
-                                viewHolder.setPprice(model.getPprice());
+                                viewHolder.setPprice("$" + model.getPprice());
                                 viewHolder.setPcurrency(model.getPcurrency());
 
                                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -411,7 +411,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                     viewHolder.setPimage(getApplicationContext(), model.getPimage());
                                     viewHolder.setPname(model.getPname());
                                     viewHolder.setPquantity(model.getPquantity());
-                                    viewHolder.setPprice(model.getPprice());
+                                    viewHolder.setPprice("$" + model.getPprice());
                                     viewHolder.setPcurrency(model.getPcurrency());
 
                                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -507,7 +507,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                 viewHolder.setPimage(getApplicationContext(), model.getPimage());
                                 viewHolder.setPname(model.getPname());
                                 viewHolder.setPquantity(model.getPquantity());
-                                viewHolder.setPprice(model.getPprice());
+                                viewHolder.setPprice("$" + model.getPprice());
                                 viewHolder.setPcurrency(model.getPcurrency());
 
                                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -578,7 +578,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                     viewHolder.setPimage(getApplicationContext(), model.getPimage());
                                     viewHolder.setPname(model.getPname());
                                     viewHolder.setPquantity(model.getPquantity());
-                                    viewHolder.setPprice(model.getPprice());
+                                    viewHolder.setPprice("$" + model.getPprice());
                                     viewHolder.setPcurrency(model.getPcurrency());
 
                                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
