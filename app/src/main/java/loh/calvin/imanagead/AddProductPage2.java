@@ -202,6 +202,7 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
                             if(task.isSuccessful()){
                                 productref.child("Type").child(producttype2).child("ptype").setValue(producttype2);
                                 Toast.makeText(AddProductPage2.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                finish();
                                 Intent descriptionpageintent = new Intent(AddProductPage2.this, DescriptionPage.class);
                                 descriptionpageintent.putExtra("product_type", producttype2);
                                 descriptionpageintent.putExtra("product_id", postRandomName);
@@ -250,6 +251,7 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
                             if(task.isSuccessful()){
                                 productref.child("Type").child(producttype2).child("ptype").setValue(producttype2);
                                 Toast.makeText(AddProductPage2.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                finish();
                                 Intent descriptionpageintent = new Intent(AddProductPage2.this, DescriptionPage.class);
                                 descriptionpageintent.putExtra("product_type", producttype2);
                                 descriptionpageintent.putExtra("product_id", postRandomName);

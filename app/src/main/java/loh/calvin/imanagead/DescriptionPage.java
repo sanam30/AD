@@ -88,6 +88,7 @@ public class DescriptionPage extends AppCompatActivity {
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()){
                             Toast.makeText(DescriptionPage.this, "Successfull", Toast.LENGTH_SHORT).show();
+                            finish();
                             startActivity(new Intent(DescriptionPage.this, MainPage.class));
                             progressDialog.dismiss();
                         }
