@@ -188,27 +188,78 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                             });
                         }
                     } else if (!search.getText().toString().isEmpty()) {
-                        String x = search.getText().toString();
-                        if (model.pname.contains(x)) {
-                            viewHolder.setPtype(model.getPtype());
-                            viewHolder.setPdate(model.getPdate());
-                            viewHolder.setPimage(getApplicationContext(), model.getPimage());
-                            viewHolder.setPname(model.getPname());
-                            viewHolder.setPquantity(model.getPquantity());
-                            viewHolder.setPprice(model.getPprice());
-                            viewHolder.setPcurrency(model.getPcurrency());
+                        String z = search.getText().toString();
+                        if (model.pname.contains(z)) {
 
-                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
-                                    viewPageIntent.putExtra("productID", productID);
-                                    viewPageIntent.putExtra("producttype", producttype);
-                                    viewPageIntent.putExtra("productcurrency", model.getPcurrency());
-                                    startActivity(viewPageIntent);
-                                }
-                            });
-                        } else if (!model.pname.contains(x)) {
+                            if(model.getPcurrency().equals("EUR")) {
+
+                                double x = Integer.parseInt(model.getPprice()) * 1.12;
+                                String y = String.format("%.2f",x);
+
+                                viewHolder.setPtype(model.getPtype());
+                                viewHolder.setPdate(model.getPdate());
+                                viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                viewHolder.setPname(model.getPname());
+                                viewHolder.setPquantity(model.getPquantity());
+                                viewHolder.setPprice("$" + y);
+                                viewHolder.setPcurrency("USD");
+
+                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                        viewPageIntent.putExtra("productID", productID);
+                                        viewPageIntent.putExtra("producttype", producttype);
+                                        viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                        startActivity(viewPageIntent);
+                                    }
+                                });
+
+                            } else if(model.getPcurrency().equals("SGD")){
+
+                                double x = Integer.parseInt(model.getPprice()) * 0.73;
+                                String y = String.format("%.2f",x);
+
+                                viewHolder.setPtype(model.getPtype());
+                                viewHolder.setPdate(model.getPdate());
+                                viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                viewHolder.setPname(model.getPname());
+                                viewHolder.setPquantity(model.getPquantity());
+                                viewHolder.setPprice("$" + y);
+                                viewHolder.setPcurrency("USD");
+
+                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                        viewPageIntent.putExtra("productID", productID);
+                                        viewPageIntent.putExtra("producttype", producttype);
+                                        viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                        startActivity(viewPageIntent);
+                                    }
+                                });
+                            } else if(model.getPcurrency().equals("USD")){
+
+                                viewHolder.setPtype(model.getPtype());
+                                viewHolder.setPdate(model.getPdate());
+                                viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                viewHolder.setPname(model.getPname());
+                                viewHolder.setPquantity(model.getPquantity());
+                                viewHolder.setPprice(model.getPprice());
+                                viewHolder.setPcurrency(model.getPcurrency());
+
+                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                        viewPageIntent.putExtra("productID", productID);
+                                        viewPageIntent.putExtra("producttype", producttype);
+                                        viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                        startActivity(viewPageIntent);
+                                    }
+                                });
+                            }
+                        } else if (!model.pname.contains(z)) {
                             viewHolder.setPtype2(model.getPtype());
                             viewHolder.setPdate2(model.getPdate());
                             viewHolder.setPimage2(getApplicationContext(), model.getPimage());
@@ -304,27 +355,77 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                 });
                             }
                         } else if (!search.getText().toString().isEmpty()) {
-                            String x = search.getText().toString();
-                            if (model.pname.contains(x)) {
-                                viewHolder.setPtype(model.getPtype());
-                                viewHolder.setPdate(model.getPdate());
-                                viewHolder.setPimage(getApplicationContext(), model.getPimage());
-                                viewHolder.setPname(model.getPname());
-                                viewHolder.setPquantity(model.getPquantity());
-                                viewHolder.setPprice(model.getPprice());
-                                viewHolder.setPcurrency(model.getPcurrency());
+                            String z = search.getText().toString();
+                            if (model.pname.contains(z)) {
+                                if(model.getPcurrency().equals("USD")) {
 
-                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
-                                        viewPageIntent.putExtra("productID", productID);
-                                        viewPageIntent.putExtra("producttype", producttype);
-                                        viewPageIntent.putExtra("productcurrency", model.getPcurrency());
-                                        startActivity(viewPageIntent);
-                                    }
-                                });
-                            } else if (!model.pname.contains(x)) {
+                                    double x = Integer.parseInt(model.getPprice()) * 0.89;
+                                    String y = String.format("%.2f",x);
+
+                                    viewHolder.setPtype(model.getPtype());
+                                    viewHolder.setPdate(model.getPdate());
+                                    viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                    viewHolder.setPname(model.getPname());
+                                    viewHolder.setPquantity(model.getPquantity());
+                                    viewHolder.setPprice("$" + y);
+                                    viewHolder.setPcurrency("EUR");
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                            viewPageIntent.putExtra("productID", productID);
+                                            viewPageIntent.putExtra("producttype", producttype);
+                                            viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                            startActivity(viewPageIntent);
+                                        }
+                                    });
+
+                                } else if(model.getPcurrency().equals("SGD")){
+
+                                    double x = Integer.parseInt(model.getPprice()) * 0.65;
+                                    String y = String.format("%.2f",x);
+
+                                    viewHolder.setPtype(model.getPtype());
+                                    viewHolder.setPdate(model.getPdate());
+                                    viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                    viewHolder.setPname(model.getPname());
+                                    viewHolder.setPquantity(model.getPquantity());
+                                    viewHolder.setPprice("$" + y);
+                                    viewHolder.setPcurrency("EUR");
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                            viewPageIntent.putExtra("productID", productID);
+                                            viewPageIntent.putExtra("producttype", producttype);
+                                            viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                            startActivity(viewPageIntent);
+                                        }
+                                    });
+                                } else if(model.getPcurrency().equals("EUR")){
+
+                                    viewHolder.setPtype(model.getPtype());
+                                    viewHolder.setPdate(model.getPdate());
+                                    viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                    viewHolder.setPname(model.getPname());
+                                    viewHolder.setPquantity(model.getPquantity());
+                                    viewHolder.setPprice(model.getPprice());
+                                    viewHolder.setPcurrency(model.getPcurrency());
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                            viewPageIntent.putExtra("productID", productID);
+                                            viewPageIntent.putExtra("producttype", producttype);
+                                            viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                            startActivity(viewPageIntent);
+                                        }
+                                    });
+                                }
+                            } else if (!model.pname.contains(z)) {
                                 viewHolder.setPtype2(model.getPtype());
                                 viewHolder.setPdate2(model.getPdate());
                                 viewHolder.setPimage2(getApplicationContext(), model.getPimage());
@@ -421,27 +522,77 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
                                 });
                             }
                         } else if (!search.getText().toString().isEmpty()) {
-                            String x = search.getText().toString();
-                            if (model.pname.contains(x)) {
-                                viewHolder.setPtype(model.getPtype());
-                                viewHolder.setPdate(model.getPdate());
-                                viewHolder.setPimage(getApplicationContext(), model.getPimage());
-                                viewHolder.setPname(model.getPname());
-                                viewHolder.setPquantity(model.getPquantity());
-                                viewHolder.setPprice(model.getPprice());
-                                viewHolder.setPcurrency(model.getPcurrency());
+                            String z = search.getText().toString();
+                            if (model.pname.contains(z)) {
+                                if(model.getPcurrency().equals("USD")) {
 
-                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
-                                        viewPageIntent.putExtra("productID", productID);
-                                        viewPageIntent.putExtra("producttype", producttype);
-                                        viewPageIntent.putExtra("productcurrency", model.getPcurrency());
-                                        startActivity(viewPageIntent);
-                                    }
-                                });
-                            } else if (!model.pname.contains(x)) {
+                                    double x = Integer.parseInt(model.getPprice()) * 1.37;
+                                    String y = String.format("%.2f",x);
+
+                                    viewHolder.setPtype(model.getPtype());
+                                    viewHolder.setPdate(model.getPdate());
+                                    viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                    viewHolder.setPname(model.getPname());
+                                    viewHolder.setPquantity(model.getPquantity());
+                                    viewHolder.setPprice("$" + y);
+                                    viewHolder.setPcurrency("SGD");
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                            viewPageIntent.putExtra("productID", productID);
+                                            viewPageIntent.putExtra("producttype", producttype);
+                                            viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                            startActivity(viewPageIntent);
+                                        }
+                                    });
+
+                                } else if(model.getPcurrency().equals("EUR")){
+
+                                    double x = Integer.parseInt(model.getPprice()) * 1.53;
+                                    String y = String.format("%.2f",x);
+
+                                    viewHolder.setPtype(model.getPtype());
+                                    viewHolder.setPdate(model.getPdate());
+                                    viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                    viewHolder.setPname(model.getPname());
+                                    viewHolder.setPquantity(model.getPquantity());
+                                    viewHolder.setPprice("$" + y);
+                                    viewHolder.setPcurrency("SGD");
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                            viewPageIntent.putExtra("productID", productID);
+                                            viewPageIntent.putExtra("producttype", producttype);
+                                            viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                            startActivity(viewPageIntent);
+                                        }
+                                    });
+                                } else if(model.getPcurrency().equals("SGD")){
+
+                                    viewHolder.setPtype(model.getPtype());
+                                    viewHolder.setPdate(model.getPdate());
+                                    viewHolder.setPimage(getApplicationContext(), model.getPimage());
+                                    viewHolder.setPname(model.getPname());
+                                    viewHolder.setPquantity(model.getPquantity());
+                                    viewHolder.setPprice(model.getPprice());
+                                    viewHolder.setPcurrency(model.getPcurrency());
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent viewPageIntent = new Intent(ProductInformation.this, SingleProductPage.class);
+                                            viewPageIntent.putExtra("productID", productID);
+                                            viewPageIntent.putExtra("producttype", producttype);
+                                            viewPageIntent.putExtra("productcurrency", model.getPcurrency());
+                                            startActivity(viewPageIntent);
+                                        }
+                                    });
+                                }
+                            } else if (!model.pname.contains(z)) {
                                 viewHolder.setPtype2(model.getPtype());
                                 viewHolder.setPdate2(model.getPdate());
                                 viewHolder.setPimage2(getApplicationContext(), model.getPimage());
