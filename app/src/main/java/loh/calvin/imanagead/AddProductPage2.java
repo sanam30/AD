@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,13 +37,14 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
 
     private EditText name, price, quantity;
     private String currency;
-    private Button addImage, next;
+    private Button addImage, next, scan;
     private ImageView productImage;
     private Spinner spinner;
     private static final int Gallery_Pick = 1;
     private Uri ImageUri;
     ProgressDialog progressDialog;
     String producttype2 = null;
+    public static TextView result;
 
     private String productname, productprice, productquantity;
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
@@ -92,6 +94,13 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(this);
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AddProductPage2.this, ScanCodePage.class));
+            }
+        });
     }
 
 
@@ -195,6 +204,9 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
                     hashMap.put("pimage", downloadUrl);
                     hashMap.put("pdate", saveCurrentDate);
                     hashMap.put("pcurrency", currency);
+                    if(!result.equals(null)) {
+                        hashMap.put("pcode", result.getText().toString());
+                    }
 
                     productref.child(producttype2).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
@@ -244,6 +256,9 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
                     hashMap.put("pprice", productprice);
                     hashMap.put("pdate", saveCurrentDate);
                     hashMap.put("pcurrency", currency);
+                if(!result.equals(null)) {
+                    hashMap.put("pcode", result.getText().toString());
+                }
 
                     productref.child(producttype2).child(postRandomName).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
@@ -285,6 +300,8 @@ public class AddProductPage2 extends AppCompatActivity implements AdapterView.On
         productImage.setVisibility(View.INVISIBLE);
 
         spinner = (Spinner)findViewById(R.id.spinnerCurrency2);
+        scan = (Button)findViewById(R.id.scan);
 
+        result = (TextView)findViewById(R.id.ResultBarcode);
     }
 }

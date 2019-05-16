@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="loh.calvin.imanagead">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +24,9 @@
         <activity android:name=".DescriptionPage" />
         <activity android:name=".ProductInformation" />
         <activity android:name=".SingleProductPage" />
-        <activity android:name=".AddProductPage2"></activity>
+        <activity android:name=".AddProductPage2" />
+        <activity android:name=".ScanCodePage" />
+        <activity android:name=".ScanCodePage2"></activity>
     </application>
 
 </manifest>

@@ -27,9 +27,6 @@ public class LoginPageEmail {
         View view = mLoginTest.findViewById(R.id.Login_Email);
         assertNotNull(view);
     }
-    @Test
-    public void emailValidator(){
-    }
     @After
     public void tearDown() throws Exception {
         mLoginTest = null;

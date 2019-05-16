@@ -1,7 +1,10 @@
 package loh.calvin.imanagead;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +39,7 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
     private Button searchbutton;
     String currency;
     Spinner spinner;
+    String productname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
