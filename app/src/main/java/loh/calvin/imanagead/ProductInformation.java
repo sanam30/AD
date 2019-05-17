@@ -33,11 +33,10 @@ public class ProductInformation extends AppCompatActivity implements AdapterView
     private Button back, add;
     RecyclerView productInfo;
     private DatabaseReference typeref;
-    private FirebaseAuth firebaseAuth;
     private TextView inf;
     private EditText search;
     private Button searchbutton;
-    String currency;
+    String currency = "USD";
     Spinner spinner;
     String productname;
 

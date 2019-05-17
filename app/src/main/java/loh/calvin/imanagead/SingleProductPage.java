@@ -160,5 +160,8 @@ public class SingleProductPage extends AppCompatActivity {
         newprice = (EditText)findViewById(R.id.newprice_single_page);
         newquantity = (EditText)findViewById(R.id.newquantity_single_page);
         remove = (Button) findViewById(R.id.remove_single_page);
+
+        productdescription.setFocusable(false);
+        productdescription.setClickable(true);
     }
 }
